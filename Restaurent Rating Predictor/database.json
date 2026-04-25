@@ -1,0 +1,18 @@
+{
+    "users": [
+        {
+            "username": "Ankit Sir",
+            "password": "2b672c769dff271969c71ea08f8cc7b9cc72c93828a3bd10d4b44abb6311a99f"
+        }
+    ],
+    "predictions": [
+        {
+            "user": "Ankit Sir",
+            "input": {
+                "cost": 0,
+                "votes": 0
+            },
+            "prediction": 4.64
+        }
+    ]
+}
