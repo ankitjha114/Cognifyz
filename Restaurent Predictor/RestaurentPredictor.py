@@ -72,7 +72,7 @@ from sklearn.svm import SVR
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor, AdaBoostRegressor
 from sklearn.neighbors import KNeighborsRegressor
-from xgboost import XGBRegressor   # 🔥 NEW
+from xgboost import XGBRegressor
 
 models = {}
 
