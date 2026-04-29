@@ -17,18 +17,15 @@ from xgboost import XGBClassifier
 
 def train_cuisine_model():
 
-    # ---------------- FILE PATH ---------------- #
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    file_path = os.path.join(BASE_DIR, "Dataset .csv")   # ✅ FIXED
+    file_path = os.path.join(BASE_DIR, "Dataset .csv")
 
     df = pd.read_csv(file_path)
 
-    # ---------------- BASIC EDA ---------------- #
     print(df.head())
     print(df.info())
     print(df.isna().sum())
 
-    # ---------------- CLEANING ---------------- #
     df = df[df["Cuisines"].notna()]
     df = df[df["Rating text"] != "Not rated"]
 
@@ -43,10 +40,8 @@ def train_cuisine_model():
 
     df.dropna(inplace=True)
 
-    # ---------------- TARGET ---------------- #
     df["Cuisines"] = df["Cuisines"].apply(lambda x: x.split(",")[0].strip())
 
-    # ---------------- ENCODING ---------------- #
     le_target = LabelEncoder()
     df["Cuisines"] = le_target.fit_transform(df["Cuisines"])
 
@@ -54,20 +49,16 @@ def train_cuisine_model():
     df["Has Table booking"] = le.fit_transform(df["Has Table booking"])
     df["Has Online delivery"] = le.fit_transform(df["Has Online delivery"])
 
-    # ---------------- FEATURES ---------------- #
     X = df.drop("Cuisines", axis=1)
     y = df["Cuisines"]
 
-    # ---------------- SCALING ---------------- #
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
 
-    # ---------------- SPLIT ---------------- #
     X_train, X_test, y_train, y_test = train_test_split(
         X_scaled, y, test_size=0.2, random_state=42
     )
 
-    # ---------------- MODELS ---------------- #
     models = {}
 
     lr = LogisticRegression(max_iter=1000)
@@ -86,7 +77,6 @@ def train_cuisine_model():
     xgb.fit(X_train, y_train)
     models["XGBoost"] = xgb
 
-    # ---------------- EVALUATION ---------------- #
     results = {}
 
     for name, model in models.items():
@@ -99,22 +89,18 @@ def train_cuisine_model():
         print("Accuracy:", acc)
         print(classification_report(y_test, preds))
 
-    # ---------------- BEST MODEL ---------------- #
     best_model_name = max(results, key=results.get)
-    print("\n🏆 Best Model:", best_model_name)
+    print("\n Best Model:", best_model_name)
 
     best_model = models[best_model_name]
 
-    # ---------------- SAVE ---------------- #
     joblib.dump(best_model, os.path.join(BASE_DIR, "best_cuisine_model.pkl"))
     joblib.dump(scaler, os.path.join(BASE_DIR, "scaler_cuisine.pkl"))
     joblib.dump(le_target, os.path.join(BASE_DIR, "label_encoder.pkl"))
 
-    print("✅ Model saved successfully!")
+    print("Model saved successfully!")
 
-    # ================= VISUALIZATIONS ================= #
 
-    # 🎯 1. Model Comparison Bar Chart
     result_df = pd.DataFrame(list(results.items()), columns=["Model", "Accuracy"])
 
     plt.figure()
@@ -123,7 +109,6 @@ def train_cuisine_model():
     plt.xticks(rotation=30)
     plt.show()
 
-    # 🎯 2. Pie Chart (Cuisine Distribution)
     cuisine_counts = df["Cuisines"].value_counts().head(5)
 
     plt.figure()
@@ -131,7 +116,6 @@ def train_cuisine_model():
     plt.title("Top 5 Cuisine Distribution")
     plt.show()
 
-    # 🎯 3. Confusion Matrix Heatmap
     preds = best_model.predict(X_test)
     cm = confusion_matrix(y_test, preds)
 
@@ -142,7 +126,6 @@ def train_cuisine_model():
     plt.ylabel("Actual")
     plt.show()
 
-    # 🎯 4. Correlation Heatmap
     plt.figure()
     sns.heatmap(df.corr(), cmap="coolwarm", annot=False)
     plt.title("Feature Correlation Heatmap")
@@ -151,8 +134,7 @@ def train_cuisine_model():
     return best_model, scaler, le_target
 
 
-# ================= RUN ================= #
 if __name__ == "__main__":
     print("🚀 Training started...")
     train_cuisine_model()
-    print("✅ Done!")
+    print("Done!")
