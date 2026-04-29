@@ -12,7 +12,6 @@ print(df.isna())
 print(df.isna().sum())
 print(df.columns)
 
-#Group by city and calculate average cost
 print(df.groupby("City")["Average Cost for two"].mean())
 print(df.groupby("City")["Average Cost for two"].mean().sort_values(ascending=False))
 print(df.groupby("City")["Average Cost for two"].mean().sort_values(ascending=False).head())
@@ -22,7 +21,6 @@ plt.xlabel("City")
 plt.ylabel("Amount")
 plt.show()
 
-#Cusines total number of votes
 print(df.groupby("Cuisines")["Votes"].sum().sort_values(ascending=True))
 data = (df.groupby("Cuisines")["Votes"].sum().reset_index())
 print(data)
@@ -66,14 +64,11 @@ X["Has Table booking"] = labelencoder.fit_transform(X["Has Table booking"])
 print(X)
 
 print(labelencoder.classes_)
-#Has table booking 0 is no and 1 is yes
 
 X["Has Online delivery"] = labelencoder.fit_transform(X["Has Online delivery"])
 print(X)
 
 print(labelencoder.classes_)
-#Has table booking 0 is no and 1 is yes
-#Has Online Delivery 0 is no and 1 is yes
 
 
 from sklearn.preprocessing import StandardScaler
