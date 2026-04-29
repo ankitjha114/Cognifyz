@@ -39,7 +39,7 @@ def train_models():
     with open("models/best_model.txt", "w") as f:
         f.write(best)
 
-    print(f"✅ Best Model: {best}")
+    print(f"Best Model: {best}")
 
 if __name__ == "__main__":
     train_models()
