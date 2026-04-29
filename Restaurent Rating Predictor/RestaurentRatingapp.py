@@ -6,16 +6,13 @@ from model import train_models
 
 st.set_page_config(page_title="Restaurant Rating Predictor", layout="wide")
 
-# Load models
 lr, svr, rf, scaler, columns, scores, df = train_models()
 
-# Session state
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
     st.session_state.username = ""
 
-# ---------------- AUTH ---------------- #
-st.sidebar.title("🔐 Authentication")
+st.sidebar.title("Authentication")
 choice = st.sidebar.selectbox("Choose", ["Login", "Register"])
 
 if choice == "Register":
@@ -42,17 +39,15 @@ elif choice == "Login":
         else:
             st.error("Invalid credentials")
 
-# ---------------- MAIN APP ---------------- #
 if st.session_state.logged_in:
 
-    st.title("🍽️ Restaurant Rating Predictor Dashboard")
+    st.title("Restaurant Rating Predictor Dashboard")
 
     menu = st.sidebar.selectbox(
         "Navigation",
         ["Prediction", "Dashboard", "Model Comparison"]
     )
 
-    # ---------------- 🔮 PREDICTION ---------------- #
     if menu == "Prediction":
         st.header("Predict Rating")
 
@@ -92,13 +87,11 @@ if st.session_state.logged_in:
                 prediction
             )
 
-    # ---------------- 📊 DASHBOARD ---------------- #
     elif menu == "Dashboard":
         st.header("Data Insights")
 
         col1, col2 = st.columns(2)
 
-        # Pie chart
         with col1:
             st.subheader("Rating Distribution")
             fig1, ax1 = plt.subplots()
@@ -107,7 +100,6 @@ if st.session_state.logged_in:
             )
             st.pyplot(fig1)
 
-        # Bar chart
         with col2:
             st.subheader("Top Cities by Cost")
             fig2, ax2 = plt.subplots()
@@ -116,7 +108,6 @@ if st.session_state.logged_in:
                 .plot(kind="bar", ax=ax2)
             st.pyplot(fig2)
 
-    # ---------------- 🤖 MODEL COMPARISON ---------------- #
     elif menu == "Model Comparison":
         st.header("Model Performance Comparison")
 
@@ -133,7 +124,6 @@ if st.session_state.logged_in:
         ax.bar(score_df["Model"], score_df["R2 Score"])
         st.pyplot(fig)
 
-    # Logout
     if st.sidebar.button("Logout"):
         st.session_state.logged_in = False
         st.session_state.username = ""
